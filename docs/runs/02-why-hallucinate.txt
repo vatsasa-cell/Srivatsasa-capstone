@@ -1,0 +1,15 @@
+An LLM might hallucinate due to several reasons, including:
+
+1. **Data Limitations**: Training data may not cover specific topics comprehensively, leading to gaps in knowledge.
+
+2. **Inference Errors**: The model may misinterpret input or generate responses based on correlations rather than factual accuracy.
+
+3. **Prompt Ambiguity**: Vague or ambiguous prompts can lead to creative but inaccurate answers.
+
+4. **Lack of Context**: Insufficient context can cause the model to generate irrelevant or fictional information.
+
+5. **Generative Nature**: As a generative model, it can produce plausible-sounding text that isn't necessarily grounded in reality.
+
+6. **Overgeneralization**: The model might apply learned patterns too broadly, resulting in incorrect extrapolations.
+
+These factors can contribute to the appearance of confidence in fabricated information.
