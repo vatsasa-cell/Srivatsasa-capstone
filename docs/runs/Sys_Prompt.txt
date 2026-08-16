@@ -1,0 +1,1 @@
+In prompt engineering, the system prompt refers to an initial instruction or context provided to an AI model to guide its responses. It sets the tone, style, and content parameters for the interaction. Essentially, the system prompt establishes the framework within which the model generates responses, influencing how it interprets subsequent user inputs.
