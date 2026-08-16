@@ -17,5 +17,9 @@ def ask(question):
     return resp.choices[0].message.content
 
 if __name__ == "__main__":
-    q = " ".join(sys.argv[1:]) or "Say hello."
-    print(ask(q))
+    if len(sys.argv) < 2:
+        print('Usage: python hello_llm.py "your question here"')
+        sys.exit(1)
+    question = sys.argv[1]
+    answer =  ask(question)    
+    print(answer)
