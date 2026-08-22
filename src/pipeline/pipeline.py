@@ -14,11 +14,13 @@ Run with:
     python -m src.pipeline.pipeline
 """
 from __future__ import annotations
+import argparse
 import asyncio
 import csv
 import json
 import time
 from pathlib import Path
+from tqdm import tqdm
 
 from .logging_config import get_logger
 from .settings import Settings, RunSummary
@@ -116,7 +118,6 @@ async def run_batch(
     tasks = [ask_llm_with_retry(q, fail_rate=fail_rate) for q in questions]
     return await asyncio.gather(*tasks)
 
-
 async def run_in_batches(
     questions: list[Question],
     batch_size: int = 5,
@@ -124,15 +125,27 @@ async def run_in_batches(
 ) -> list[Answer]:
     """Fire questions in chunks of `batch_size`, with a 100 ms pause between batches."""
     out: list[Answer] = []
-    for i in range(0, len(questions), batch_size):
+
+    total_batches = (len(questions) + batch_size - 1) // batch_size
+
+    for i in tqdm(
+        range(0, len(questions), batch_size),
+        total=total_batches,
+        desc="Processing batches",
+    ):
         chunk = questions[i : i + batch_size]
+
         log.info(f"batch {i // batch_size + 1}: {len(chunk)} questions")
+
         batch_answers = await asyncio.gather(
             *(ask_llm_with_retry(q, fail_rate=fail_rate) for q in chunk)
         )
+
         out.extend(batch_answers)
-        await asyncio.sleep(0.1)              # gentle pace between batches
+        await asyncio.sleep(0.1)
+
     return out
+
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -163,10 +176,43 @@ def summarise_run(
 # Entrypoint
 # ─────────────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Process only the first N questions",
+    )
+
+    parser.add_argument(
+    "--fail-rate",
+    type=float,
+    default=None,
+    help="Override Settings.fail_rate",
+    )
+
+    args = parser.parse_args()
+
+    if args.limit is not None and args.limit < 1:
+        parser.error("--limit must be at least 1")
+
+    if args.fail_rate is not None and not 0.0 <= args.fail_rate <= 1.0:
+        parser.error("--fail-rate must be between 0.0 and 1.0")
+
     settings = Settings()
+
+    fail_rate = (
+        args.fail_rate
+        if args.fail_rate is not None
+        else settings.fail_rate
+    )
+
     log.info(f"config: {settings.model_dump(mode='json')}")
 
     questions = load_questions(settings.questions_csv)
+    if args.limit is not None:
+        questions = questions[:args.limit]
+
     log.info(f"loaded {len(questions)} questions")
 
     started = time.time()
@@ -174,7 +220,7 @@ if __name__ == "__main__":
         run_in_batches(
             questions,
             batch_size=settings.batch_size,
-            fail_rate=settings.fail_rate,
+            fail_rate=fail_rate,
         )
     )
     elapsed = time.time() - started
@@ -197,6 +243,9 @@ if __name__ == "__main__":
         encoding="utf-8",
     )
     print(f"wrote {len(answers)} answers to {settings.results_json} in {elapsed:.2f}s")
+
+    print(f"total cost: ${summary.total_cost_usd:.4f}")
+    log.info(f"total cost: ${summary.total_cost_usd:.4f}")
 
     # SQLite persistence
     # Deferred import: store.py imports Answer from this module; top-level import
