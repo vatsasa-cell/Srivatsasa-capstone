@@ -622,3 +622,19 @@
 {"ts": 1787420974.699, "level": "INFO", "msg": "summary: {\"started_at\":1787420972.6532156,\"elapsed_seconds\":2.0452420711517334,\"n_questions\":5,\"n_succeeded\":5,\"n_retries_total\":1,\"total_cost_usd\":0.0005,\"fail_rate\":0.0,\"use_fake\":true}", "logger": "pipeline"}
 {"ts": 1787420974.71, "level": "INFO", "msg": "total cost: $0.0005", "logger": "pipeline"}
 {"ts": 1787420974.883, "level": "INFO", "msg": "persisted run 20 with 5 answers to results.db", "logger": "pipeline"}
+{"ts": 1787734756.403, "level": "INFO", "msg": "asked: What is the leave policy?", "logger": "pipeline"}
+{"ts": 1787738739.586, "level": "INFO", "msg": "asked: What is the leave policy?", "logger": "pipeline"}
+{"ts": 1787739718.917, "level": "INFO", "msg": "asked: What is the leave policy?", "logger": "pipeline"}
+{"ts": 1787911910.884, "level": "INFO", "msg": "asked: What is the leave policy?", "logger": "pipeline"}
+{"ts": 1787912373.074, "level": "INFO", "msg": "asked: What is the leave policy?", "logger": "pipeline"}
+{"ts": 1787912711.102, "level": "INFO", "msg": "asked: What is the leave policy?", "logger": "pipeline"}
+{"ts": 1787912754.223, "level": "INFO", "msg": "asked: What is the leave policy?", "logger": "pipeline"}
+{"ts": 1787913148.144, "level": "INFO", "msg": "asked: How does the procurement approval proces", "logger": "pipeline"}
+{"ts": 1787913469.542, "level": "INFO", "msg": "asked: What is the leave policy?", "logger": "pipeline"}
+{"ts": 1787932399.061, "level": "INFO", "msg": "asked: string", "logger": "pipeline"}
+{"ts": 1787932496.907, "level": "INFO", "msg": "asked: What is the leave policy?", "logger": "pipeline"}
+{"ts": 1787932670.492, "level": "INFO", "msg": "asked: How does the procurement approval proces", "logger": "pipeline"}
+{"ts": 1787932711.16, "level": "INFO", "msg": "asked: What's the policy on bringing pets to th", "logger": "pipeline"}
+{"ts": 1787936461.593, "level": "INFO", "msg": "asked: What is RAG?", "logger": "pipeline"}
+{"ts": 1787936461.596, "level": "WARNING", "msg": "retry 1 for: What is RAG? (simulated)", "logger": "pipeline"}
+{"ts": 1787936461.604, "level": "WARNING", "msg": "retry 2 for: What is RAG? (simulated)", "logger": "pipeline"}
