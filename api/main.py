@@ -49,6 +49,7 @@ app = FastAPI(
     title="Capstone API",
     description="Wraps the W2 async pipeline. Contract locked in ADR 0002 (W3); internals upgraded W4+.",
     version="1.0.0",
+    root_path="/proxy/8000",
 )
 
 
