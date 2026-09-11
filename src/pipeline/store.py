@@ -1,14 +1,17 @@
-"""Tiny SQLite persistence — two tables, one writer per table.
+"""Tiny SQLite persistence — three tables.
 
 Schema:
-  runs    — one row per pipeline execution (mirrors RunSummary fields)
-  answers — one row per LLM call, FK-linked to runs.id
+  runs       — one row per pipeline execution (mirrors RunSummary fields)
+  answers    — one row per LLM call, FK-linked to runs.id
+  eval_runs  — one row per evaluation run/result
 """
 from __future__ import annotations
+
 import sqlite3
 import time
 from pathlib import Path
 from typing import Iterable
+
 
 from .pipeline import Answer
 from .settings import RunSummary
@@ -37,11 +40,27 @@ CREATE TABLE IF NOT EXISTS answers (
     ts        REAL    NOT NULL,
     FOREIGN KEY (run_id) REFERENCES runs(id)
 );
+
+CREATE TABLE IF NOT EXISTS eval_runs (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    golden_id         TEXT NOT NULL,
+    question          TEXT NOT NULL,
+    candidate_answer  TEXT NOT NULL,
+    ideal_answer      TEXT NOT NULL,
+    candidate_model   TEXT NOT NULL,
+    judge_model       TEXT NOT NULL,
+    accuracy          INTEGER NOT NULL,
+    groundedness      INTEGER NOT NULL,
+    format            INTEGER NOT NULL,
+    reasoning         TEXT NOT NULL,
+    eval_run_label    TEXT DEFAULT 'eval-run-001',
+    created_at        TEXT DEFAULT CURRENT_TIMESTAMP
+);
 """
 
 
 def connect(path: str | Path = "results.db") -> sqlite3.Connection:
-    """Open (or create) the database, ensure both tables exist, return the connection."""
+    """Open (or create) the database, ensure all tables exist, return the connection."""
     con = sqlite3.connect(path)
     con.executescript(SCHEMA)
     con.commit()
@@ -80,6 +99,7 @@ def write_answers(
         (run_id, a.question, a.text, a.cost_usd, a.retries, ts)
         for a in answers
     ]
+
     con.executemany(
         "INSERT INTO answers (run_id, question, answer, cost_usd, retries, ts) "
         "VALUES (?, ?, ?, ?, ?, ?)",
@@ -87,3 +107,111 @@ def write_answers(
     )
     con.commit()
     return len(rows)
+
+
+def write_eval_run(
+    con: sqlite3.Connection,
+    golden_id: str,
+    question: str,
+    candidate_answer: str,
+    ideal_answer: str,
+    candidate_model: str,
+    judge_model: str,
+    accuracy: int,
+    groundedness: int,
+    format: int,
+    reasoning: str,
+    eval_run_label: str = "eval-run-001",
+) -> int:
+    """Insert one row into `eval_runs`. Returns the new row id."""
+
+    cur = con.execute(
+        """
+        INSERT INTO eval_runs (
+            golden_id,
+            question,
+            candidate_answer,
+            ideal_answer,
+            candidate_model,
+            judge_model,
+            accuracy,
+            groundedness,
+            format,
+            reasoning,
+            eval_run_label
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            golden_id,
+            question,
+            candidate_answer,
+            ideal_answer,
+            candidate_model,
+            judge_model,
+            accuracy,
+            groundedness,
+            format,
+            reasoning,
+            eval_run_label,
+        ),
+    )
+
+    con.commit()
+    return cur.lastrowid
+
+
+def read_eval_runs(
+    con: sqlite3.Connection,
+    eval_run_label: str | None = None,
+) -> list[sqlite3.Row]:
+    """Read evaluation results, optionally filtered by eval_run_label."""
+
+    con.row_factory = sqlite3.Row
+
+    if eval_run_label is None:
+        cur = con.execute(
+            """
+            SELECT
+                id,
+                golden_id,
+                question,
+                candidate_answer,
+                ideal_answer,
+                candidate_model,
+                judge_model,
+                accuracy,
+                groundedness,
+                format,
+                reasoning,
+                eval_run_label,
+                created_at
+            FROM eval_runs
+            ORDER BY id
+            """
+        )
+    else:
+        cur = con.execute(
+            """
+            SELECT
+                id,
+                golden_id,
+                question,
+                candidate_answer,
+                ideal_answer,
+                candidate_model,
+                judge_model,
+                accuracy,
+                groundedness,
+                format,
+                reasoning,
+                eval_run_label,
+                created_at
+            FROM eval_runs
+            WHERE eval_run_label = ?
+            ORDER BY id
+            """,
+            (eval_run_label,),
+        )
+
+    return cur.fetchall()

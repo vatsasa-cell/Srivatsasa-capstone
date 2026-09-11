@@ -638,3 +638,8 @@
 {"ts": 1787936461.593, "level": "INFO", "msg": "asked: What is RAG?", "logger": "pipeline"}
 {"ts": 1787936461.596, "level": "WARNING", "msg": "retry 1 for: What is RAG? (simulated)", "logger": "pipeline"}
 {"ts": 1787936461.604, "level": "WARNING", "msg": "retry 2 for: What is RAG? (simulated)", "logger": "pipeline"}
+{"ts": 1789116552.802, "level": "INFO", "msg": "asked: What is RAG?", "logger": "pipeline"}
+{"ts": 1789116552.805, "level": "WARNING", "msg": "retry 1 for: What is RAG? (simulated)", "logger": "pipeline"}
+{"ts": 1789116552.81, "level": "WARNING", "msg": "retry 2 for: What is RAG? (simulated)", "logger": "pipeline"}
+{"ts": 1789117473.244, "level": "INFO", "msg": "asked: What is RAG?", "logger": "pipeline"}
+{"ts": 1789118439.227, "level": "INFO", "msg": "asked: What is RAG?", "logger": "pipeline"}
