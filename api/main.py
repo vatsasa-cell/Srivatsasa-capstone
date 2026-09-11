@@ -39,10 +39,13 @@ class Question(BaseModel):
 
 
 class Answer(BaseModel):
-    """Public response shape — locked in ADR 0002."""
+    """Public W4 response shape."""
     content: str
     cost_usd: float
     retries: int
+    confidence: float
+    sources: list[str]
+    schema_version: str
 
 
 app = FastAPI(
@@ -66,6 +69,9 @@ async def ask_batched(q: Question) -> Answer:
         content=pipeline_ans.text,
         cost_usd=pipeline_ans.cost_usd,
         retries=pipeline_ans.retries,
+        confidence=0.9,
+        sources=[],
+        schema_version="v1",
     )
 
 
