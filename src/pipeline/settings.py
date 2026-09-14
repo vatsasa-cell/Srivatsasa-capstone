@@ -19,7 +19,7 @@ class Settings(BaseModel):
     batch_size:    int   = Field(5,   gt=0, le=20)
     fail_rate:     float = Field(0.0, ge=0.0, le=1.0)
     model:         str   = "gpt-4o-mini"
-    use_fake:      bool  = True
+    use_fake:      bool  = False
 
 
 class RunSummary(BaseModel):
@@ -32,4 +32,4 @@ class RunSummary(BaseModel):
     n_retries_total:  int   = Field(ge=0)
     total_cost_usd:   float = Field(ge=0.0)
     fail_rate:        float = Field(ge=0.0, le=1.0)
-    use_fake:         bool
+    use_fake:      bool  = False
