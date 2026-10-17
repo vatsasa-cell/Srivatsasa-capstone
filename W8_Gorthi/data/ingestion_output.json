@@ -1,0 +1,57 @@
+[
+  {
+    "document_id": "company-policies",
+    "chunk_id": "company-policies-p1-c1",
+    "source": "company_policies.pdf",
+    "file_type": "pdf",
+    "section": "Policy",
+    "text": "Company Policies\nSection 1: Leave Approval\nEmployees must obtain manager approval before planned leave.\nEmergency leave should be reported to the manager promptly.\nSection 2: IT Support\nContact the IT Support team when company equipment fails.",
+    "page": 1,
+    "contains_pii": false,
+    "metadata_version": 1
+  },
+  {
+    "document_id": "product-page",
+    "chunk_id": "product-page-c1",
+    "source": "product_page.html",
+    "file_type": "html",
+    "section": "Page Title",
+    "text": "Enterprise Laptop",
+    "page": null,
+    "contains_pii": false,
+    "metadata_version": 1
+  },
+  {
+    "document_id": "product-page",
+    "chunk_id": "product-page-c2",
+    "source": "product_page.html",
+    "file_type": "html",
+    "section": "Product Overview",
+    "text": "A business laptop designed for everyday office workloads.",
+    "page": null,
+    "contains_pii": false,
+    "metadata_version": 1
+  },
+  {
+    "document_id": "product-page",
+    "chunk_id": "product-page-c3",
+    "source": "product_page.html",
+    "file_type": "html",
+    "section": "Warranty",
+    "text": "The product includes a standard one-year limited warranty.",
+    "page": null,
+    "contains_pii": false,
+    "metadata_version": 1
+  },
+  {
+    "document_id": "employee-onboarding",
+    "chunk_id": "employee-onboarding-c1",
+    "source": "onboarding.docx",
+    "file_type": "docx",
+    "section": "Document",
+    "text": "Employee Onboarding Guide\nFirst Day\nMeet your manager and complete the required orientation.\nIT Setup\nRequest approved access to the tools required for your role.",
+    "page": null,
+    "contains_pii": false,
+    "metadata_version": 1
+  }
+]
